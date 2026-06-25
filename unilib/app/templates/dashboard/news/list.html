@@ -1,0 +1,96 @@
+{% extends "dashboard/base_dash.html" %}
+{% block page_title %}Manajemen Berita{% endblock %}
+
+{% block dash_content %}
+<div class="flex items-center justify-between mb-6">
+  <div>
+    <h1 class="font-poppins text-2xl font-bold text-[#000000]">Manajemen Berita</h1>
+    <p class="text-sm text-[#45464d] mt-0.5">Kelola artikel dan berita perpustakaan</p>
+  </div>
+  <a href="{{ url_for('staff.news_create') }}" class="btn btn-primary">
+    <span class="material-symbols-outlined" style="font-size:16px;">add</span>
+    Tambah Berita
+  </a>
+</div>
+
+<div class="dash-card overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="dash-table">
+      <thead>
+        <tr>
+          <th>Judul</th>
+          <th>Kategori</th>
+          <th>Status</th>
+          <th>Tanggal</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for article in news.items %}
+        <tr>
+          <td>
+            <div class="font-medium text-[#000000] max-w-xs truncate">{{ article.title }}</div>
+            <div class="text-xs text-[#76777d] mt-0.5">{{ article.author.full_name if article.author else '-' }}</div>
+          </td>
+          <td><span class="text-xs text-[#45464d]">{{ article.category }}</span></td>
+          <td>
+            <span class="badge {{ 'badge-published' if article.status == 'published' else 'badge-draft' }}">
+              {{ 'Publik' if article.status == 'published' else 'Draft' }}
+            </span>
+          </td>
+          <td class="text-xs text-[#45464d]">
+            {{ article.published_at.strftime('%d %b %Y') if article.published_at else '-' }}
+          </td>
+          <td>
+            <div class="flex items-center gap-2">
+              <a href="{{ url_for('staff.news_edit', news_id=article.id) }}" class="btn btn-ghost btn-sm">Edit</a>
+              <form method="POST" action="{{ url_for('staff.news_toggle', news_id=article.id) }}" class="inline">
+                {{ csrf_token() }}
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-sm" style="background:#f2f4f6; color:#45464d; border:1px solid #e6e8ea;">
+                  {{ 'Unpublish' if article.status == 'published' else 'Publish' }}
+                </button>
+              </form>
+              <form method="POST" action="{{ url_for('staff.news_delete', news_id=article.id) }}" class="inline"
+                    onsubmit="return confirm('Hapus berita ini?')">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="5" class="text-center py-12 text-[#45464d]">
+            <span class="material-symbols-outlined text-4xl text-[#c6c6cd] block mb-2">article</span>
+            Belum ada berita. <a href="{{ url_for('staff.news_create') }}" class="text-[#0051d5] font-semibold">Tambah sekarang</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  {% if news.pages > 1 %}
+  <div class="px-6 py-4 border-t border-[#e6e8ea] flex justify-between items-center">
+    <p class="text-xs text-[#45464d]">{{ news.total }} berita total</p>
+    <div class="pagination">
+      {% if news.has_prev %}
+      <a href="{{ url_for('staff.news_list', page=news.prev_num) }}">&lsaquo;</a>
+      {% endif %}
+      {% for p in news.iter_pages() %}
+        {% if p %}
+          <{{ 'span class="active"' if p == news.page else 'a href="' + url_for('staff.news_list', page=p) + '"' }}>{{ p }}</{{ 'span' if p == news.page else 'a' }}>
+        {% else %}
+          <span>...</span>
+        {% endif %}
+      {% endfor %}
+      {% if news.has_next %}
+      <a href="{{ url_for('staff.news_list', page=news.next_num) }}">&rsaquo;</a>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

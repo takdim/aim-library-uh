@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}UniLib — Perpustakaan Digital Universitas Hasanuddin{% endblock %}</title>
+  <meta name="description" content="{% block meta_desc %}Portal digital perpustakaan Universitas Hasanuddin: repository, e-journal, layanan akademik, dan berita terkini.{% endblock %}">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+
+  <!-- Material Symbols -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap" rel="stylesheet">
+
+  <!-- Custom CSS (Glass UI + Poppins/Inter) -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'primary': '#000000',
+            'secondary': '#0051d5',
+            'secondary-dim': '#003ea8',
+            'bg-base': '#f7f9fb',
+            'on-surface': '#191c1e',
+            'on-surface-variant': '#45464d',
+            'primary-fixed': '#dae2fd',
+            'secondary-fixed': '#dbe1ff',
+            'tertiary-fixed': '#d4e3ff',
+            'tertiary-fixed-dim': '#a4c9ff',
+            'surface-variant': '#e0e3e5',
+            'surface-container': '#eceef0',
+          },
+          fontFamily: {
+            'poppins': ['Poppins', 'system-ui', 'sans-serif'],
+            'inter': ['Inter', 'system-ui', 'sans-serif'],
+          },
+          borderRadius: {
+            'card': '24px',
+            'card-lg': '32px',
+          }
+        }
+      }
+    }
+  </script>
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-[#f7f9fb] text-[#191c1e] antialiased overflow-x-hidden selection:bg-[#0051d5] selection:text-white">
+
+  <!-- ── Flash Messages ─────────────────────────────────────── -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="fixed top-20 right-4 z-[200] space-y-2 w-full max-w-sm" aria-live="polite">
+        {% for category, message in messages %}
+          <div class="flash-message glass-panel rounded-2xl px-5 py-3 flex items-start gap-3
+            {% if category == 'success' %}border-l-4 border-emerald-500
+            {% elif category == 'danger' %}border-l-4 border-red-500
+            {% elif category == 'warning' %}border-l-4 border-amber-500
+            {% else %}border-l-4 border-blue-400{% endif %}">
+            <span class="material-symbols-outlined text-sm mt-0.5
+              {% if category == 'success' %}text-emerald-600
+              {% elif category == 'danger' %}text-red-600
+              {% elif category == 'warning' %}text-amber-600
+              {% else %}text-blue-600{% endif %}">
+              {% if category == 'success' %}check_circle{% elif category == 'danger' %}error{% elif category == 'warning' %}warning{% else %}info{% endif %}
+            </span>
+            <p class="text-sm text-[#191c1e] flex-1">{{ message }}</p>
+            <button data-dismiss aria-label="Tutup" class="text-[#76777d] hover:text-[#191c1e] transition-colors ml-auto">
+              <span class="material-symbols-outlined text-sm">close</span>
+            </button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  {% block body %}{% endblock %}
+
+  <!-- Main JS -->
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="flex min-h-[100dvh]">
+
+  <!-- ── Sidebar ───────────────────────────────────────────── -->
+  <aside id="dash-sidebar" class="dash-sidebar w-64 shrink-0 flex flex-col fixed top-0 left-0 h-full z-40
+    translate-x-0 transition-transform duration-300 lg:translate-x-0 -translate-x-full lg:static lg:h-auto" aria-label="Navigasi dashboard">
+
+    <!-- Brand -->
+    <div class="p-5 border-b border-white/06">
+      <a href="{{ url_for('public.index') }}" class="flex items-center gap-2">
+        <span class="material-symbols-outlined text-[#a4c9ff]" style="font-size:22px;">local_library</span>
+        <span class="font-poppins text-lg font-bold text-white">UniLib</span>
+      </a>
+      <p class="text-[10px] text-white/30 mt-0.5 ml-7 tracking-wider uppercase">Dashboard</p>
+    </div>
+
+    <!-- User info -->
+    <div class="px-4 py-4 border-b border-white/06">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-full bg-[#0051d5]/40 flex items-center justify-center shrink-0">
+          <span class="material-symbols-outlined text-[#a4c9ff]" style="font-size:18px;">person</span>
+        </div>
+        <div class="min-w-0">
+          <div class="text-sm font-semibold text-white truncate">{{ current_user.full_name }}</div>
+          <div class="text-[10px] tracking-wider uppercase text-white/40">{{ current_user.role }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto" aria-label="Menu dashboard">
+      <a href="{{ url_for('staff.dashboard') }}"
+         class="{{ 'active' if request.endpoint == 'staff.dashboard' else '' }}">
+        <span class="material-symbols-outlined" style="font-size:20px;">dashboard</span>
+        Dashboard
+      </a>
+      <a href="{{ url_for('staff.news_list') }}"
+         class="{{ 'active' if 'news' in request.endpoint else '' }}">
+        <span class="material-symbols-outlined" style="font-size:20px;">article</span>
+        Berita
+      </a>
+      <a href="{{ url_for('staff.profile_list') }}"
+         class="{{ 'active' if 'profile' in request.endpoint else '' }}">
+        <span class="material-symbols-outlined" style="font-size:20px;">info</span>
+        Profil
+      </a>
+      <a href="{{ url_for('staff.nav_links_list') }}"
+         class="{{ 'active' if 'nav_links' in request.endpoint else '' }}">
+        <span class="material-symbols-outlined" style="font-size:20px;">link</span>
+        Repository / E-Journal
+      </a>
+      <a href="{{ url_for('staff.services_list') }}"
+         class="{{ 'active' if 'services' in request.endpoint else '' }}">
+        <span class="material-symbols-outlined" style="font-size:20px;">apps</span>
+        Layanan
+      </a>
+      <a href="{{ url_for('staff.stats_list') }}"
+         class="{{ 'active' if 'stats' in request.endpoint else '' }}">
+        <span class="material-symbols-outlined" style="font-size:20px;">bar_chart</span>
+        Statistik
+      </a>
+
+      {% if current_user.is_admin() %}
+      <div class="border-t border-white/08 my-3"></div>
+      <p class="text-[10px] font-semibold tracking-widest text-white/25 uppercase px-4 pb-1">Admin</p>
+      <a href="{{ url_for('admin.users_list') }}"
+         class="{{ 'active' if 'users' in request.endpoint else '' }}">
+        <span class="material-symbols-outlined" style="font-size:20px;">group</span>
+        Manajemen User
+      </a>
+      <a href="{{ url_for('admin.activity_logs') }}"
+         class="{{ 'active' if 'logs' in request.endpoint else '' }}">
+        <span class="material-symbols-outlined" style="font-size:20px;">history</span>
+        Log Aktivitas
+      </a>
+      {% endif %}
+    </nav>
+
+    <!-- Logout -->
+    <div class="p-4 border-t border-white/06">
+      <a href="{{ url_for('auth.logout') }}"
+         class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-white/50 hover:text-white hover:bg-white/08 transition-colors">
+        <span class="material-symbols-outlined" style="font-size:18px;">logout</span>
+        Logout
+      </a>
+      <a href="{{ url_for('public.index') }}"
+         class="flex items-center gap-2 px-4 py-2 rounded-xl text-sm text-white/50 hover:text-white hover:bg-white/08 transition-colors mt-1">
+        <span class="material-symbols-outlined" style="font-size:18px;">open_in_new</span>
+        Lihat Website
+      </a>
+    </div>
+  </aside>
+
+  <!-- Mobile overlay -->
+  <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" aria-hidden="true"></div>
+
+  <!-- ── Main Content ──────────────────────────────────────── -->
+  <div class="flex-1 flex flex-col min-w-0 lg:ml-0">
+
+    <!-- Mobile topbar -->
+    <header class="lg:hidden flex items-center justify-between px-5 py-4 border-b border-[#e6e8ea] bg-white sticky top-0 z-20">
+      <button id="sidebar-toggle" aria-label="Buka sidebar"
+              class="w-9 h-9 rounded-xl border border-[#e6e8ea] flex items-center justify-center text-[#45464d] hover:bg-[#f7f9fb] transition-colors">
+        <span class="material-symbols-outlined" style="font-size:20px;">menu</span>
+      </button>
+      <span class="font-poppins text-base font-semibold text-[#000000]">{% block page_title %}Dashboard{% endblock %}</span>
+      <div class="w-9"></div>
+    </header>
+
+    <!-- Page content -->
+    <main class="flex-1 p-6 lg:p-8 overflow-auto bg-[#f7f9fb]">
+      {% block dash_content %}{% endblock %}
+    </main>
+  </div>
+</div>
+
+<script>
+// Sidebar overlay on mobile
+const overlay = document.getElementById('sidebar-overlay');
+const sidebar = document.getElementById('dash-sidebar');
+const toggle = document.getElementById('sidebar-toggle');
+if (toggle) {
+  toggle.addEventListener('click', () => {
+    sidebar.classList.toggle('-translate-x-full');
+    overlay.classList.toggle('hidden');
+  });
+}
+if (overlay) {
+  overlay.addEventListener('click', () => {
+    sidebar.classList.add('-translate-x-full');
+    overlay.classList.add('hidden');
+  });
+}
+</script>
+{% endblock %}

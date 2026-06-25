@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ section.title }} — UniLib{% endblock %}
+
+{% block body %}
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-7xl rounded-full border border-white/25 bg-white/40 backdrop-blur-[24px] shadow-[0_8px_32px_rgba(15,23,42,0.08)] z-50">
+  <div class="flex justify-between items-center px-6 md:px-8 py-3">
+    <a href="{{ url_for('public.index') }}" class="font-poppins text-xl font-bold text-[#131b2e] hover:scale-105 transition-transform flex items-center gap-2">
+      <span class="material-symbols-outlined text-[#0051d5]" style="font-size:22px;">local_library</span>
+      UniLib
+    </a>
+    <a href="{{ url_for('public.index') }}" class="text-sm font-semibold text-[#45464d] flex items-center gap-1 hover:text-[#0051d5] transition-colors">
+      <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span>
+      Beranda
+    </a>
+  </div>
+</nav>
+
+<main class="min-h-[100dvh] pt-28 pb-20 px-5 md:px-10 max-w-3xl mx-auto">
+  <h1 class="font-poppins text-[32px] md:text-[40px] font-bold text-[#000000] mb-8">{{ section.title }}</h1>
+
+  {% if section.image_url %}
+  <figure class="rounded-card-lg overflow-hidden mb-10 shadow-lg">
+    <img src="{{ url_for('static', filename='uploads/' + section.image_url) }}"
+         alt="{{ section.title }}"
+         class="w-full h-72 object-cover">
+  </figure>
+  {% endif %}
+
+  <div class="font-inter text-base text-[#191c1e] leading-relaxed prose max-w-none">
+    {{ section.content | safe if section.content else '<p class="text-[#45464d]">Konten belum tersedia.</p>' | safe }}
+  </div>
+</main>
+{% endblock %}

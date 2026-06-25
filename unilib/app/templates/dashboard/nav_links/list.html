@@ -1,0 +1,80 @@
+{% extends "dashboard/base_dash.html" %}
+{% block page_title %}Repository & E-Journal{% endblock %}
+
+{% block dash_content %}
+<div class="flex items-center justify-between mb-6">
+  <div>
+    <h1 class="font-poppins text-2xl font-bold text-[#000000]">Repository & E-Journal</h1>
+    <p class="text-sm text-[#45464d]">Kelola link yang tampil di dropdown navbar</p>
+  </div>
+  <a href="{{ url_for('staff.nav_links_create') }}" class="btn btn-primary">
+    <span class="material-symbols-outlined" style="font-size:16px;">add</span>
+    Tambah Link
+  </a>
+</div>
+
+<!-- Repository -->
+<div class="dash-card overflow-hidden mb-6">
+  <div class="px-6 py-4 border-b border-[#e6e8ea] flex items-center gap-2">
+    <span class="material-symbols-outlined text-[#0051d5]" style="font-size:18px;">folder_open</span>
+    <h2 class="font-semibold text-[#000000]">Repository</h2>
+    <span class="badge badge-published ml-auto">{{ repos|length }} item</span>
+  </div>
+  <table class="dash-table">
+    <thead><tr><th>Nama</th><th>URL</th><th>Urutan</th><th>Status</th><th>Aksi</th></tr></thead>
+    <tbody>
+      {% for repo in repos %}
+      <tr>
+        <td class="font-medium text-sm text-[#000000]">{{ repo.name }}</td>
+        <td class="text-xs text-[#45464d] max-w-xs truncate"><a href="{{ repo.url }}" target="_blank" class="hover:text-[#0051d5]">{{ repo.url }}</a></td>
+        <td class="text-xs text-[#45464d]">{{ repo.sort_order }}</td>
+        <td><span class="badge {{ 'badge-active' if repo.is_active else 'badge-inactive' }}">{{ 'Aktif' if repo.is_active else 'Nonaktif' }}</span></td>
+        <td>
+          <div class="flex gap-2">
+            <a href="{{ url_for('staff.nav_links_edit', link_id=repo.id) }}" class="btn btn-ghost btn-sm">Edit</a>
+            <form method="POST" action="{{ url_for('staff.nav_links_delete', link_id=repo.id) }}" onsubmit="return confirm('Hapus link ini?')">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-danger btn-sm">Hapus</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="text-center py-8 text-[#45464d]">Belum ada link Repository</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- E-Journal -->
+<div class="dash-card overflow-hidden">
+  <div class="px-6 py-4 border-b border-[#e6e8ea] flex items-center gap-2">
+    <span class="material-symbols-outlined text-[#0051d5]" style="font-size:18px;">menu_book</span>
+    <h2 class="font-semibold text-[#000000]">E-Journal</h2>
+    <span class="badge badge-published ml-auto">{{ ejournals|length }} item</span>
+  </div>
+  <table class="dash-table">
+    <thead><tr><th>Nama</th><th>URL</th><th>Status</th><th>Aksi</th></tr></thead>
+    <tbody>
+      {% for ej in ejournals %}
+      <tr>
+        <td class="font-medium text-sm text-[#000000]">{{ ej.name }}</td>
+        <td class="text-xs text-[#45464d] max-w-xs truncate"><a href="{{ ej.url }}" target="_blank" class="hover:text-[#0051d5]">{{ ej.url }}</a></td>
+        <td><span class="badge {{ 'badge-active' if ej.is_active else 'badge-inactive' }}">{{ 'Aktif' if ej.is_active else 'Nonaktif' }}</span></td>
+        <td>
+          <div class="flex gap-2">
+            <a href="{{ url_for('staff.nav_links_edit', link_id=ej.id) }}" class="btn btn-ghost btn-sm">Edit</a>
+            <form method="POST" action="{{ url_for('staff.nav_links_delete', link_id=ej.id) }}" onsubmit="return confirm('Hapus link ini?')">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn btn-danger btn-sm">Hapus</button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="text-center py-8 text-[#45464d]">Belum ada link E-Journal</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

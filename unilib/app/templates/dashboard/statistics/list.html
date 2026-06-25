@@ -1,0 +1,41 @@
+{% extends "dashboard/base_dash.html" %}
+{% block page_title %}Statistik{% endblock %}
+
+{% block dash_content %}
+<div class="flex items-center justify-between mb-6">
+  <div>
+    <h1 class="font-poppins text-2xl font-bold text-[#000000]">Statistik Counter</h1>
+    <p class="text-sm text-[#45464d]">Nilai yang tampil di beranda publik</p>
+  </div>
+  <a href="{{ url_for('staff.stats_create') }}" class="btn btn-primary">
+    <span class="material-symbols-outlined" style="font-size:16px;">add</span> Tambah
+  </a>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+  {% for stat in stats %}
+  <div class="dash-card p-5">
+    <div class="flex items-center justify-between mb-3">
+      <div class="w-10 h-10 rounded-xl bg-[#dae2fd] flex items-center justify-center">
+        <span class="material-symbols-outlined text-[#0051d5]" style="font-size:20px; font-variation-settings:'FILL' 1;">{{ stat.icon or 'bar_chart' }}</span>
+      </div>
+      <div class="flex gap-1">
+        <a href="{{ url_for('staff.stats_edit', stat_id=stat.id) }}" class="w-7 h-7 rounded-lg border border-[#e6e8ea] flex items-center justify-center hover:bg-[#f2f4f6] transition-colors">
+          <span class="material-symbols-outlined text-[#45464d]" style="font-size:14px;">edit</span>
+        </a>
+        <form method="POST" action="{{ url_for('staff.stats_delete', stat_id=stat.id) }}" onsubmit="return confirm('Hapus statistik ini?')">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button class="w-7 h-7 rounded-lg border border-[#e6e8ea] flex items-center justify-center hover:bg-red-50 hover:border-red-200 transition-colors">
+            <span class="material-symbols-outlined text-[#45464d] hover:text-red-600" style="font-size:14px;">delete</span>
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="font-poppins text-2xl font-bold text-[#000000]">{{ '{:,}'.format(stat.value).replace(',', '.') }}</div>
+    <div class="text-xs font-semibold tracking-wider text-[#45464d] uppercase mt-1">{{ stat.label }}</div>
+  </div>
+  {% else %}
+  <p class="text-[#45464d] col-span-4">Belum ada statistik</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "dashboard/base_dash.html" %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block dash_content %}
+<div class="mb-8">
+  <h1 class="font-poppins text-2xl font-bold text-[#000000] mb-1">Selamat Datang, {{ current_user.full_name }}!</h1>
+  <p class="text-sm text-[#45464d]">Kelola konten Perpustakaan Universitas Hasanuddin.</p>
+</div>
+
+<!-- Stats cards -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+  <div class="dash-card p-5">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-9 h-9 rounded-xl bg-[#dae2fd] flex items-center justify-center">
+        <span class="material-symbols-outlined text-[#0051d5]" style="font-size:18px;">article</span>
+      </div>
+      <span class="text-xs font-semibold text-[#45464d] uppercase tracking-wider">Total Berita</span>
+    </div>
+    <div class="font-poppins text-3xl font-bold text-[#000000]">{{ news_count }}</div>
+  </div>
+
+  <div class="dash-card p-5">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-9 h-9 rounded-xl bg-[#c8f0d4] flex items-center justify-center">
+        <span class="material-symbols-outlined text-[#1a4d2e]" style="font-size:18px;">check_circle</span>
+      </div>
+      <span class="text-xs font-semibold text-[#45464d] uppercase tracking-wider">Dipublikasi</span>
+    </div>
+    <div class="font-poppins text-3xl font-bold text-[#000000]">{{ pub_count }}</div>
+  </div>
+
+  <div class="dash-card p-5">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-9 h-9 rounded-xl bg-[#ffd6a5] flex items-center justify-center">
+        <span class="material-symbols-outlined text-[#7c4a00]" style="font-size:18px;">draft</span>
+      </div>
+      <span class="text-xs font-semibold text-[#45464d] uppercase tracking-wider">Draft</span>
+    </div>
+    <div class="font-poppins text-3xl font-bold text-[#000000]">{{ news_count - pub_count }}</div>
+  </div>
+
+  <div class="dash-card p-5">
+    <div class="flex items-center gap-3 mb-3">
+      <div class="w-9 h-9 rounded-xl bg-[#dbe1ff] flex items-center justify-center">
+        <span class="material-symbols-outlined text-[#003ea8]" style="font-size:18px;">manage_accounts</span>
+      </div>
+      <span class="text-xs font-semibold text-[#45464d] uppercase tracking-wider">Role Saya</span>
+    </div>
+    <div class="font-poppins text-xl font-bold text-[#000000] capitalize">{{ current_user.role }}</div>
+  </div>
+</div>
+
+<!-- Quick actions -->
+<div class="dash-card p-6">
+  <h2 class="font-poppins text-base font-semibold text-[#000000] mb-5">Aksi Cepat</h2>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <a href="{{ url_for('staff.news_create') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-[#e6e8ea] hover:border-[#0051d5]/30 hover:bg-[#f2f4f6] transition-all text-center">
+      <span class="material-symbols-outlined text-[#0051d5]" style="font-size:24px;">add_circle</span>
+      <span class="text-xs font-semibold text-[#45464d]">Tambah Berita</span>
+    </a>
+    <a href="{{ url_for('staff.profile_list') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-[#e6e8ea] hover:border-[#0051d5]/30 hover:bg-[#f2f4f6] transition-all text-center">
+      <span class="material-symbols-outlined text-[#0051d5]" style="font-size:24px;">edit_note</span>
+      <span class="text-xs font-semibold text-[#45464d]">Edit Profil</span>
+    </a>
+    <a href="{{ url_for('staff.stats_list') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-[#e6e8ea] hover:border-[#0051d5]/30 hover:bg-[#f2f4f6] transition-all text-center">
+      <span class="material-symbols-outlined text-[#0051d5]" style="font-size:24px;">bar_chart</span>
+      <span class="text-xs font-semibold text-[#45464d]">Update Statistik</span>
+    </a>
+    <a href="{{ url_for('staff.nav_links_list') }}" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-[#e6e8ea] hover:border-[#0051d5]/30 hover:bg-[#f2f4f6] transition-all text-center">
+      <span class="material-symbols-outlined text-[#0051d5]" style="font-size:24px;">link</span>
+      <span class="text-xs font-semibold text-[#45464d]">Kelola Link</span>
+    </a>
+  </div>
+</div>
+{% endblock %}

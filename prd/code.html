@@ -1,0 +1,413 @@
+<!DOCTYPE html><html class="scroll-smooth" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>UniLib - University Digital Library</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c6c6cd",
+                        "outline": "#76777d",
+                        "surface-container-high": "#e6e8ea",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "on-secondary": "#ffffff",
+                        "background": "#f7f9fb",
+                        "on-primary-fixed": "#131b2e",
+                        "primary-fixed": "#dae2fd",
+                        "primary-container": "#131b2e",
+                        "on-tertiary-fixed-variant": "#004883",
+                        "on-secondary-container": "#fefcff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e0e3e5",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#001c39",
+                        "on-secondary-fixed": "#00174b",
+                        "surface-container": "#eceef0",
+                        "surface-tint": "#565e74",
+                        "inverse-primary": "#bec6e0",
+                        "secondary-fixed": "#dbe1ff",
+                        "inverse-surface": "#2d3133",
+                        "surface-container-low": "#f2f4f6",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "surface-dim": "#d8dadc",
+                        "tertiary-fixed-dim": "#a4c9ff",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#0051d5",
+                        "on-primary-container": "#7c839b",
+                        "on-surface": "#191c1e",
+                        "inverse-on-surface": "#eff1f3",
+                        "primary-fixed-dim": "#bec6e0",
+                        "secondary-container": "#316bf3",
+                        "on-surface-variant": "#45464d",
+                        "surface-container-lowest": "#ffffff",
+                        "tertiary-fixed": "#d4e3ff",
+                        "on-tertiary-container": "#3c86d9",
+                        "on-primary-fixed-variant": "#3f465c",
+                        "tertiary-container": "#001c39",
+                        "on-error-container": "#93000a",
+                        "primary": "#000000",
+                        "surface": "#f7f9fb",
+                        "surface-bright": "#f7f9fb",
+                        "tertiary": "#000000",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-background": "#191c1e",
+                        "on-error": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "base": "8px",
+                        "lg": "48px",
+                        "xl": "80px",
+                        "sm": "12px",
+                        "container-max": "1440px",
+                        "gutter": "24px",
+                        "md": "24px",
+                        "xs": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Poppins"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "caption": ["Inter"],
+                        "display-lg": ["Poppins"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Poppins"],
+                        "headline-lg": ["Poppins"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["32px", {"lineHeight": "40px", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "display-lg": ["64px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+        }
+        
+        .glass-panel-dark {
+            background: rgba(45, 49, 51, 0.8);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hover-lift {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #00174b, #0051d5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .reveal-on-scroll.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .image-zoom-container {
+            overflow: hidden;
+        }
+        .image-zoom-container img {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .image-zoom-container:hover img {
+            transform: scale(1.1);
+        }
+        
+        .bg-pattern {
+            background-image: radial-gradient(#dbe1ff 1px, transparent 1px);
+            background-size: 32px 32px;
+        }
+        
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased overflow-x-hidden selection:bg-secondary selection:text-white">
+<!-- Global Background Shader -->
+<div class="fixed inset-0 z-[-1] pointer-events-none">
+
+</div>
+<!-- Navigation Components (JSON) -->
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[90%] max-w-7xl rounded-full border border-white/25 bg-white/20 dark:bg-black/20 backdrop-blur-[24px] backdrop-blur-3xl shadow-[0_8px_32px_rgba(15,23,42,0.08)] shadow-xl z-50 transition-all duration-300" id="main-nav">
+<div class="flex justify-between items-center px-8 py-3 w-full z-50">
+<!-- Brand -->
+<a class="font-headline-md text-headline-md font-bold text-primary dark:text-on-secondary-container hover:scale-105 transition-transform duration-300" href="#">
+                UniLib
+            </a>
+<!-- Links (Desktop) -->
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-secondary border-b-2 border-secondary pb-1 font-label-md text-label-md hover:scale-105 transition-transform duration-300 active:scale-95 transition-all duration-200" href="#beranda">Beranda</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-md text-label-md hover:scale-105 transition-transform duration-300 active:scale-95 transition-all duration-200" href="#profil">Profil</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-md text-label-md hover:scale-105 transition-transform duration-300 active:scale-95 transition-all duration-200" href="#repository">Repository</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-md text-label-md hover:scale-105 transition-transform duration-300 active:scale-95 transition-all duration-200" href="#e-journal">E-Journal</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-md text-label-md hover:scale-105 transition-transform duration-300 active:scale-95 transition-all duration-200" href="#layanan">Layanan</a>
+</div>
+<!-- Trailing Action -->
+<div class="flex items-center space-x-4">
+<button class="hidden lg:flex items-center justify-center w-10 h-10 rounded-full bg-white/50 hover:bg-white/80 transition-colors">
+
+</button>
+
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center pt-24 pb-12 overflow-hidden px-5 md:px-10 lg:px-20" id="beranda">
+<!-- Background Image with Overlay -->
+<div class="absolute inset-0 z-[-1]">
+<div class="absolute inset-0 bg-cover bg-center w-full h-full" data-alt="A highly atmospheric, blurred background of a modern, futuristic university library interior. Tall shelves of physical books blend seamlessly with glowing holographic displays and sleek, curving white glass tables. Soft, cool blue lighting filters through large floor-to-ceiling windows, casting a serene, intellectual glow. The overall mood is quiet, advanced, and prestigious, utilizing a light-mode palette of pristine whites, subtle greys, and deep navy accents." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDqMiqe_NyNxRoo0Q6zK2BNxe2nnjjoxPqmCQ5-zrpA8rK8m8DDPi_-BsBPgYSCLXFKl1hlK_53aU9JjlwhnDk4ILwQoXQqKJDpVfz-SdSV4bDRpfJMato0dLz6oDot7okdJLYnq4Y7OlXnIT4mxUu2q9nA6_dKERR_h3_DtNlGirbFPQiSQZXjA7FCiK-Q-5nekuIX7NaNow7khzVIvNbxyJ-XtOzYiXZXdd2EsNXJ-0Bbkt2V-N7S9Yg2_CyAoQSDIrAoEwt5a5o')"></div>
+<div class="absolute inset-0 bg-gradient-to-br from-white/90 via-white/70 to-secondary-fixed/50 backdrop-blur-[8px]"></div>
+</div>
+<!-- Floating Decorative Blobs (Parallax) -->
+<div class="absolute top-1/4 left-10 w-64 h-64 bg-primary-fixed rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob parallax-element" data-speed="2" style="transform: translate(11.68px, -17.92px);"></div>
+<div class="absolute top-1/3 right-10 w-72 h-72 bg-secondary-fixed-dim rounded-full mix-blend-multiply filter blur-3xl opacity-50 animate-blob animation-delay-2000 parallax-element" data-speed="-1" style="transform: translate(-5.84px, 8.96px);"></div>
+<div class="absolute bottom-1/4 left-1/3 w-80 h-80 bg-tertiary-fixed rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-blob animation-delay-4000 parallax-element" data-speed="1.5" style="transform: translate(8.76px, -13.44px);"></div>
+<div class="relative z-10 max-w-5xl mx-auto text-center reveal-on-scroll is-visible">
+<div class="inline-flex items-center space-x-2 bg-white/50 backdrop-blur-md border border-white/40 px-4 py-2 rounded-full mb-8 hover-lift">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+<span class="font-label-md text-label-md text-secondary">Akses Terbuka 24/7</span>
+</div>
+<h1 class="font-display-lg text-[48px] md:text-display-lg text-primary leading-tight mb-6">
+                    Membangun Masa Depan <br>
+<span class="text-gradient">Melalui Pengetahuan</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-10">
+                    Perpustakaan digital modern yang menghubungkan mahasiswa dengan repository, jurnal elektronik, dan layanan akademik.
+                </p>
+<div class="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+<a class="glass-panel text-secondary font-label-md text-label-md px-8 py-4 rounded-full flex items-center space-x-2 hover-lift w-full sm:w-auto justify-center bg-white/60" href="#repository">
+<span class="">Jelajahi Repository</span>
+<span class="material-symbols-outlined">arrow_forward</span>
+</a>
+<a class="font-label-md text-label-md text-on-surface px-8 py-4 rounded-full flex items-center space-x-2 hover:bg-white/20 transition-colors w-full sm:w-auto justify-center" href="#layanan">
+<span class="material-symbols-outlined">play_circle</span>
+<span class="">Panduan Layanan</span>
+</a>
+</div>
+</div>
+<!-- Scroll Indicator -->
+<div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center animate-bounce text-on-surface-variant opacity-70">
+<span class="font-caption text-caption mb-2">Scroll</span>
+<span class="material-symbols-outlined text-sm">south</span>
+</div>
+</section>
+<!-- Stats Section -->
+<section class="relative -mt-24 z-20 px-5 md:px-10 lg:px-20 max-w-[1440px] mx-auto">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+<!-- Stat 1 -->
+<div class="glass-panel rounded-[24px] p-6 text-center hover-lift reveal-on-scroll is-visible">
+<div class="w-12 h-12 mx-auto bg-primary-fixed rounded-full flex items-center justify-center mb-4 text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">folder_open</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1" data-target="15420">15,420+</h3>
+<p class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Koleksi Repository</p>
+</div>
+<!-- Stat 2 -->
+<div class="glass-panel rounded-[24px] p-6 text-center hover-lift reveal-on-scroll is-visible" style="transition-delay: 100ms;">
+<div class="w-12 h-12 mx-auto bg-secondary-fixed rounded-full flex items-center justify-center mb-4 text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">menu_book</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1" data-target="8500">8,500+</h3>
+<p class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Buku Digital</p>
+</div>
+<!-- Stat 3 -->
+<div class="glass-panel rounded-[24px] p-6 text-center hover-lift reveal-on-scroll is-visible" style="transition-delay: 200ms;">
+<div class="w-12 h-12 mx-auto bg-tertiary-fixed rounded-full flex items-center justify-center mb-4 text-tertiary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">article</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1" data-target="25000">25,000+</h3>
+<p class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Jurnal Internasional</p>
+</div>
+<!-- Stat 4 -->
+<div class="glass-panel rounded-[24px] p-6 text-center hover-lift reveal-on-scroll is-visible" style="transition-delay: 300ms;">
+<div class="w-12 h-12 mx-auto bg-surface-variant rounded-full flex items-center justify-center mb-4 text-on-surface">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-1" data-target="1200">1,200+</h3>
+<p class="font-caption text-caption text-on-surface-variant uppercase tracking-wider">Pengunjung Harian</p>
+</div>
+</div>
+</section>
+<!-- News & Events Section -->
+<section class="relative z-20 px-5 md:px-10 lg:px-20 max-w-[1440px] mx-auto py-24" id="berita">
+<div class="text-center mb-16 reveal-on-scroll is-visible">
+<h2 class="font-display-lg text-[40px] md:text-headline-lg text-primary mb-4">Berita &amp; Acara Terkini</h2>
+<p class="font-body-lg text-on-surface-variant max-w-2xl mx-auto">Informasi terbaru seputar kegiatan, pembaruan sistem, dan koleksi perpustakaan.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="glass-panel rounded-[32px] p-4 flex flex-col hover-lift reveal-on-scroll is-visible">
+<div class="relative w-full h-48 rounded-[24px] overflow-hidden image-zoom-container mb-6">
+<img alt="AI Search" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3u7inezINR4K0rCxdTzsU6us7dMxtdnZxcdbCGcUpdNIhT4HlYnt3bVHWnnee6tqDSoTHvlDcrr4x7EKVvJ9r0hKZJoaULHaDXau-KFIPTbAiKoo_7gpVUKEa-Vm6yAZkkzLKTlgxjXUlqkcmFP5MlBdB6EJKHJe4Co1MTewhYhSbetdPp-r7igo2GW6i476-uGSj1UoZSfAakw43uuzBxfFof12WvHUpg9B-1zyYpkLzkl-7QPn0IyGngjZOZjqO5-aE7lnOnXU">
+<div class="absolute top-4 left-4 bg-white/60 backdrop-blur-md px-3 py-1 rounded-full font-label-md text-[12px] text-on-surface border border-white/40 shadow-sm">
+                    Riset
+                </div>
+</div>
+<div class="px-2 flex-grow flex flex-col">
+<span class="font-caption text-secondary font-medium mb-2">15 Okt 2023</span>
+<h3 class="font-headline-md text-[20px] leading-tight text-primary mb-3">Peluncuran Sistem AI Search Terbaru</h3>
+<p class="font-body-md text-on-surface-variant mb-6 flex-grow line-clamp-3 text-sm">
+                    Optimization for faster research discovery. Temukan jurnal dan literatur yang tepat dalam hitungan detik dengan dukungan kecerdasan buatan.
+                </p>
+<a class="inline-flex items-center justify-center space-x-2 bg-white/50 backdrop-blur-md border border-white/40 px-6 py-3 rounded-full hover:bg-white/70 transition-colors font-label-md text-secondary w-full sm:w-max mt-auto" href="#">
+<span class="">Baca Selengkapnya</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="glass-panel rounded-[32px] p-4 flex flex-col hover-lift reveal-on-scroll is-visible" style="transition-delay: 100ms;">
+<div class="relative w-full h-48 rounded-[24px] overflow-hidden image-zoom-container mb-6">
+<img alt="Seminar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDU_r3E_WVxIrd2GXlzCnQVqimZqmuR3zjIrHgoo9L2yIo-fhBa-uFj3VMB58_yELq8pokldK7VzBeYhhRFJ2FDmkf5pCvkLFaYHVDWlsmWiIMrV2zfgjPy4xdOcf_lKS0aX2zL78v3Fc4voSY8enUXOevnwr3RscXUJolLVGzexRcSXmms4JcxXSNRyWf8ijEQbGbpgQ1NE69AsN57kkKeIjhxGm5ZRFLFNysxjEb9qqDR2tF8zVl8RK3tNGgw5grtGa4iMhVVTkA">
+<div class="absolute top-4 left-4 bg-white/60 backdrop-blur-md px-3 py-1 rounded-full font-label-md text-[12px] text-on-surface border border-white/40 shadow-sm">
+                    Event
+                </div>
+</div>
+<div class="px-2 flex-grow flex flex-col">
+<span class="font-caption text-secondary font-medium mb-2">22 Nov 2023</span>
+<h3 class="font-headline-md text-[20px] leading-tight text-primary mb-3">Seminar Literasi Digital 2024</h3>
+<p class="font-body-md text-on-surface-variant mb-6 flex-grow line-clamp-3 text-sm">
+                    Bridging the gap for all generations. Bergabunglah bersama para pakar untuk meningkatkan pemahaman literasi digital di era informasi.
+                </p>
+<a class="inline-flex items-center justify-center space-x-2 bg-white/50 backdrop-blur-md border border-white/40 px-6 py-3 rounded-full hover:bg-white/70 transition-colors font-label-md text-secondary w-full sm:w-max mt-auto" href="#">
+<span class="">Baca Selengkapnya</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="glass-panel rounded-[32px] p-4 flex flex-col hover-lift reveal-on-scroll is-visible" style="transition-delay: 200ms;">
+<div class="relative w-full h-48 rounded-[24px] overflow-hidden image-zoom-container mb-6">
+<img alt="Koleksi Jurnal" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBb22fPAOPB5fHSUY4A0p8ryPKWPKThM5rn7-16KIRHQuJ5pI3H4-VgG0mGjGqI2yoa3H_ih6zEyCsrcPwXSS4UX6bcn0t413-CySyw5cu9ddDXZWdFhenPXwaUYaksZSkyjM3AMlyRjnpsn4UYvg7wrPU9QranE-v6x0U7XQqbW3lpOAXMSA7A7IUfTttYy6xAbWwDHX62W57DXgVZlzFvdbl81Zy_CZ3PF840DlKaeF1Ll3M7ndhH_izHr7yYkuJFWRjovKiiqFU">
+<div class="absolute top-4 left-4 bg-white/60 backdrop-blur-md px-3 py-1 rounded-full font-label-md text-[12px] text-on-surface border border-white/40 shadow-sm">
+                    Akademik
+                </div>
+</div>
+<div class="px-2 flex-grow flex flex-col">
+<span class="font-caption text-secondary font-medium mb-2">05 Des 2023</span>
+<h3 class="font-headline-md text-[20px] leading-tight text-primary mb-3">Penambahan 5.000 Koleksi Jurnal Internasional</h3>
+<p class="font-body-md text-on-surface-variant mb-6 flex-grow line-clamp-3 text-sm">
+                    Expanding our global knowledge reach. Akses tanpa batas ke ribuan literatur ilmiah terbaru dari berbagai disiplin ilmu di seluruh dunia.
+                </p>
+<a class="inline-flex items-center justify-center space-x-2 bg-white/50 backdrop-blur-md border border-white/40 px-6 py-3 rounded-full hover:bg-white/70 transition-colors font-label-md text-secondary w-full sm:w-max mt-auto" href="#">
+<span class="">Baca Selengkapnya</span>
+<span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+</main>
+<script>
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    
+                    // Trigger counters if they exist in the element
+                    const counters = entry.target.querySelectorAll('.counter');
+                    if(counters.length > 0) {
+                         counters.forEach(counter => {
+                            const target = +counter.getAttribute('data-target');
+                            const duration = 2000; // ms
+                            const step = target / (duration / 16); // 60fps
+                            let current = 0;
+
+                            const updateCounter = () => {
+                                current += step;
+                                if (current < target) {
+                                    counter.innerText = Math.ceil(current).toLocaleString();
+                                    requestAnimationFrame(updateCounter);
+                                } else {
+                                    counter.innerText = target.toLocaleString() + (target > 1000 ? '+' : '');
+                                }
+                            };
+                            updateCounter();
+                            counter.classList.remove('counter'); // Prevent re-triggering
+                        });
+                    }
+
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal-on-scroll').forEach((elem) => {
+            observer.observe(elem);
+        });
+
+        // Parallax effect for blobs
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX - window.innerWidth / 2) / 100;
+            const y = (e.clientY - window.innerHeight / 2) / 100;
+            
+            document.querySelectorAll('.parallax-element').forEach(el => {
+                const speed = el.getAttribute('data-speed') || 1;
+                el.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+            });
+        });
+
+        // Navbar blur effect on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('main-nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-white/40');
+                nav.classList.remove('bg-white/20');
+            } else {
+                nav.classList.remove('bg-white/40');
+                nav.classList.add('bg-white/20');
+            }
+        });
+    </script>
+
+
+</body></html>

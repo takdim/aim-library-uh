@@ -1,0 +1,53 @@
+{% extends "dashboard/base_dash.html" %}
+{% block page_title %}{{ 'Edit Link' if link else 'Tambah Link' }}{% endblock %}
+
+{% block dash_content %}
+<div class="flex items-center gap-3 mb-6">
+  <a href="{{ url_for('staff.nav_links_list') }}" class="w-9 h-9 rounded-xl border border-[#e6e8ea] flex items-center justify-center hover:bg-[#f2f4f6]">
+    <span class="material-symbols-outlined text-[#45464d]" style="font-size:18px;">arrow_back</span>
+  </a>
+  <h1 class="font-poppins text-2xl font-bold text-[#000000]">{{ 'Edit Link' if link else 'Tambah Link Baru' }}</h1>
+</div>
+
+<form method="POST" enctype="multipart/form-data" novalidate class="max-w-2xl">
+  {{ form.hidden_tag() }}
+  <div class="dash-card p-6 space-y-5">
+    <div class="grid grid-cols-2 gap-5">
+      <div>
+        <label class="form-label">{{ form.type.label.text }}</label>
+        {{ form.type(class='form-input') }}
+      </div>
+      <div>
+        <label class="form-label">{{ form.sort_order.label.text }}</label>
+        {{ form.sort_order(class='form-input') }}
+      </div>
+    </div>
+    <div>
+      <label class="form-label">{{ form.name.label.text }} <span class="text-red-500">*</span></label>
+      {{ form.name(class='form-input', placeholder='mis. ScienceDirect') }}
+      {% for e in form.name.errors %}<p class="form-error">{{ e }}</p>{% endfor %}
+    </div>
+    <div>
+      <label class="form-label">{{ form.url.label.text }} <span class="text-red-500">*</span></label>
+      {{ form.url(class='form-input', placeholder='https://...') }}
+      {% for e in form.url.errors %}<p class="form-error">{{ e }}</p>{% endfor %}
+    </div>
+    <div>
+      <label class="form-label">{{ form.description.label.text }}</label>
+      {{ form.description(class='form-input', rows=2) }}
+    </div>
+    <div>
+      <label class="form-label">{{ form.logo.label.text }}</label>
+      {{ form.logo(class='form-input py-2') }}
+    </div>
+    <div class="flex items-center gap-2">
+      {{ form.is_active(class='w-4 h-4 accent-[#0051d5]') }}
+      <label class="text-sm text-[#45464d]">{{ form.is_active.label.text }}</label>
+    </div>
+  </div>
+  <div class="flex gap-3 mt-5">
+    {{ form.submit(class='btn btn-primary') }}
+    <a href="{{ url_for('staff.nav_links_list') }}" class="btn btn-ghost">Batal</a>
+  </div>
+</form>
+{% endblock %}

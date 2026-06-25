@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ article.title }} — UniLib{% endblock %}
+{% block meta_desc %}{{ article.excerpt or (article.content | striptags | truncate(150)) }}{% endblock %}
+
+{% block body %}
+<!-- Minimal navbar for article pages -->
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[92%] max-w-7xl rounded-full border border-white/25 bg-white/40 backdrop-blur-[24px] shadow-[0_8px_32px_rgba(15,23,42,0.08)] z-50">
+  <div class="flex justify-between items-center px-6 md:px-8 py-3">
+    <a href="{{ url_for('public.index') }}" class="font-poppins text-xl font-bold text-[#131b2e] hover:scale-105 transition-transform flex items-center gap-2">
+      <span class="material-symbols-outlined text-[#0051d5]" style="font-size:22px;">local_library</span>
+      UniLib
+    </a>
+    <a href="{{ url_for('public.index') }}#berita" class="text-sm font-semibold text-[#45464d] flex items-center gap-1 hover:text-[#0051d5] transition-colors">
+      <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span>
+      Kembali
+    </a>
+  </div>
+</nav>
+
+<main class="min-h-[100dvh] pt-24 pb-20 px-5 md:px-10 max-w-3xl mx-auto">
+
+  <!-- Breadcrumb -->
+  <nav aria-label="Breadcrumb" class="mb-6">
+    <ol class="flex items-center gap-2 text-xs text-[#45464d]">
+      <li><a href="{{ url_for('public.index') }}" class="hover:text-[#0051d5] transition-colors">Beranda</a></li>
+      <li aria-hidden="true"><span class="material-symbols-outlined" style="font-size:12px;">chevron_right</span></li>
+      <li><a href="{{ url_for('public.index') }}#berita" class="hover:text-[#0051d5] transition-colors">Berita</a></li>
+      <li aria-hidden="true"><span class="material-symbols-outlined" style="font-size:12px;">chevron_right</span></li>
+      <li class="text-[#0051d5] font-medium truncate max-w-[200px]">{{ article.title }}</li>
+    </ol>
+  </nav>
+
+  <!-- Category + Date -->
+  <div class="flex items-center gap-3 mb-4">
+    <span class="badge badge-published">{{ article.category }}</span>
+    <time class="text-xs text-[#45464d]" datetime="{{ article.published_at.strftime('%Y-%m-%d') if article.published_at else '' }}">
+      {{ article.published_at.strftime('%d %B %Y') if article.published_at else '' }}
+    </time>
+    {% if article.author %}
+    <span class="text-xs text-[#76777d]">oleh {{ article.author.full_name }}</span>
+    {% endif %}
+  </div>
+
+  <!-- Title -->
+  <h1 class="font-poppins text-[32px] md:text-[40px] font-bold text-[#000000] leading-tight mb-8">{{ article.title }}</h1>
+
+  <!-- Cover image -->
+  {% if article.cover_image %}
+  <figure class="rounded-card-lg overflow-hidden image-zoom-container mb-10 shadow-lg">
+    <img src="{{ url_for('static', filename='uploads/' + article.cover_image) }}"
+         alt="{{ article.title }}"
+         class="w-full h-80 object-cover">
+  </figure>
+  {% endif %}
+
+  <!-- Content -->
+  <div class="font-inter text-base text-[#191c1e] leading-relaxed prose prose-headings:font-poppins prose-a:text-[#0051d5] max-w-none">
+    {{ article.content | safe }}
+  </div>
+
+  <!-- Back link -->
+  <div class="mt-14 pt-8 border-t border-[#e6e8ea]">
+    <a href="{{ url_for('public.index') }}#berita"
+       class="inline-flex items-center gap-2 text-sm font-semibold text-[#0051d5] hover:gap-3 transition-all">
+      <span class="material-symbols-outlined" style="font-size:18px;">arrow_back</span>
+      Lihat Semua Berita
+    </a>
+  </div>
+</main>
+{% endblock %}
