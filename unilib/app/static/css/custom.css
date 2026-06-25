@@ -145,7 +145,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* ── Navbar ─────────────────────────────────────────────────── */
 #main-nav {
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition: background 0.3s ease, box-shadow 0.3s ease, border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 #main-nav.scrolled {
   background: rgba(255, 255, 255, 0.72) !important;

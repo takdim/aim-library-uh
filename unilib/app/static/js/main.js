@@ -89,9 +89,42 @@ if (parallaxEls.length && !window.matchMedia('(prefers-reduced-motion: reduce)')
 const hamburger = document.getElementById('hamburger-btn');
 const mobileMenu = document.getElementById('mobile-menu');
 if (hamburger && mobileMenu) {
+  const hamburgerIcon = hamburger.querySelector('.material-symbols-outlined');
+  
   hamburger.addEventListener('click', () => {
-    const isOpen = mobileMenu.classList.toggle('hidden');
-    hamburger.setAttribute('aria-expanded', String(!isOpen));
+    const isClosed = mobileMenu.classList.toggle('hidden');
+    hamburger.setAttribute('aria-expanded', String(!isClosed));
+    
+    // Change icon to close when menu is open
+    if (hamburgerIcon) {
+      hamburgerIcon.textContent = isClosed ? 'menu' : 'close';
+    }
+    
+    // Adjust border-radius so container doesn't become a giant circle
+    if (nav) {
+      if (isClosed) {
+        nav.classList.remove('rounded-[2rem]');
+        nav.classList.add('rounded-full');
+      } else {
+        nav.classList.remove('rounded-full');
+        nav.classList.add('rounded-[2rem]');
+      }
+    }
+  });
+
+  // Close mobile menu when clicking any link inside it
+  mobileMenu.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      mobileMenu.classList.add('hidden');
+      hamburger.setAttribute('aria-expanded', 'false');
+      if (hamburgerIcon) {
+        hamburgerIcon.textContent = 'menu';
+      }
+      if (nav) {
+        nav.classList.remove('rounded-[2rem]');
+        nav.classList.add('rounded-full');
+      }
+    });
   });
 }
 
