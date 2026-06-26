@@ -317,15 +317,47 @@
           <p class="text-xs text-[#45464d] line-clamp-2">{{ svc.description }}</p>
           {% endif %}
         </div>
-        {% if svc.link_url %}
-        <a href="{{ svc.link_url }}" class="text-xs font-semibold text-[#0051d5] mt-auto flex items-center gap-1 hover:gap-2 transition-all">
+        <button
+          onclick="openServiceModal(this)"
+          data-title="{{ svc.title | e }}"
+          data-icon="{{ svc.icon or 'support' }}"
+          data-description="{{ svc.description | e if svc.description else '' }}"
+          data-link="{{ svc.link_url | e if svc.link_url else '' }}"
+          class="text-xs font-semibold text-[#0051d5] mt-auto flex items-center gap-1 hover:gap-2 transition-all cursor-pointer">
           Selengkapnya <span class="material-symbols-outlined" style="font-size:13px;">arrow_forward</span>
-        </a>
-        {% endif %}
+        </button>
       </div>
       {% else %}
       <p class="text-[#45464d] col-span-4">Belum ada layanan yang ditambahkan.</p>
       {% endfor %}
+    </div>
+
+    <!-- Service Detail Modal -->
+    <div id="serviceModal" class="fixed inset-0 z-[200] flex items-center justify-center p-5 hidden" aria-modal="true" role="dialog">
+      <!-- Backdrop -->
+      <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeServiceModal()"></div>
+      <!-- Panel -->
+      <div class="relative bg-white rounded-[24px] shadow-2xl w-full max-w-md p-8 flex flex-col gap-5 animate-modal">
+        <!-- Close -->
+        <button onclick="closeServiceModal()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#f2f4f6] flex items-center justify-center hover:bg-[#e6e8ea] transition-colors" aria-label="Tutup">
+          <span class="material-symbols-outlined text-[#45464d]" style="font-size:18px;">close</span>
+        </button>
+        <!-- Icon + Title -->
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-[#dae2fd] flex items-center justify-center shrink-0">
+            <span id="modalIcon" class="material-symbols-outlined text-[#0051d5]" style="font-size:28px; font-variation-settings:'FILL' 1;">support</span>
+          </div>
+          <h3 id="modalTitle" class="font-poppins text-lg font-bold text-[#000000] leading-snug"></h3>
+        </div>
+        <!-- Description -->
+        <p id="modalDescription" class="font-inter text-sm text-[#45464d] leading-relaxed"></p>
+        <!-- Link button (shown only if link exists) -->
+        <a id="modalLink" href="#" target="_blank" rel="noopener noreferrer"
+           class="hidden items-center justify-center gap-2 w-full py-3 px-5 rounded-full bg-[#0051d5] text-white text-sm font-semibold hover:bg-[#0041b0] transition-colors">
+          <span class="material-symbols-outlined" style="font-size:16px;">open_in_new</span>
+          Kunjungi Halaman
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -445,4 +477,43 @@
 </footer>
 
 </main>
+
+<style>
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+.animate-modal { animation: modal-in 0.2s ease forwards; }
+</style>
+
+<script>
+function openServiceModal(btn) {
+  document.getElementById('modalIcon').textContent        = btn.dataset.icon || 'support';
+  document.getElementById('modalTitle').textContent       = btn.dataset.title || '';
+  document.getElementById('modalDescription').textContent = btn.dataset.description || 'Tidak ada deskripsi tersedia.';
+
+  const linkEl = document.getElementById('modalLink');
+  if (btn.dataset.link) {
+    linkEl.href = btn.dataset.link;
+    linkEl.classList.remove('hidden');
+    linkEl.classList.add('flex');
+  } else {
+    linkEl.classList.add('hidden');
+    linkEl.classList.remove('flex');
+  }
+
+  const modal = document.getElementById('serviceModal');
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeServiceModal() {
+  document.getElementById('serviceModal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeServiceModal();
+});
+</script>
 {% endblock %}
