@@ -314,7 +314,7 @@
         <div>
           <div class="font-poppins text-sm font-semibold text-[#000000] mb-1">{{ svc.title }}</div>
           {% if svc.description %}
-          <p class="text-xs text-[#45464d] line-clamp-2">{{ svc.description }}</p>
+          <p class="text-xs text-[#45464d] line-clamp-2">{{ svc.description | html_preview }}</p>
           {% endif %}
         </div>
         <button
@@ -350,7 +350,7 @@
           <h3 id="modalTitle" class="font-poppins text-lg font-bold text-[#000000] leading-snug"></h3>
         </div>
         <!-- Description -->
-        <p id="modalDescription" class="font-inter text-sm text-[#45464d] leading-relaxed"></p>
+        <div id="modalDescription" class="font-inter text-sm text-[#45464d] leading-relaxed prose prose-sm max-w-none prose-ul:pl-5 prose-ol:pl-5 prose-li:my-0.5 overflow-y-auto max-h-64"></div>
         <!-- Link button (shown only if link exists) -->
         <a id="modalLink" href="#" target="_blank" rel="noopener noreferrer"
            class="hidden items-center justify-center gap-2 w-full py-3 px-5 rounded-full bg-[#0051d5] text-white text-sm font-semibold hover:bg-[#0041b0] transition-colors">
@@ -469,10 +469,6 @@
 
   <div class="max-w-[1440px] mx-auto border-t border-white/08 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
     <p class="text-xs text-white/35">&copy; {{ 2026 }} Perpustakaan Universitas Hasanuddin. Hak cipta dilindungi.</p>
-    <a href="{{ url_for('auth.login') }}" class="text-xs text-white/35 hover:text-white/60 transition-colors flex items-center gap-1">
-      <span class="material-symbols-outlined" style="font-size:12px;">lock</span>
-      Staff Login
-    </a>
   </div>
 </footer>
 
@@ -490,7 +486,7 @@
 function openServiceModal(btn) {
   document.getElementById('modalIcon').textContent        = btn.dataset.icon || 'support';
   document.getElementById('modalTitle').textContent       = btn.dataset.title || '';
-  document.getElementById('modalDescription').textContent = btn.dataset.description || 'Tidak ada deskripsi tersedia.';
+  document.getElementById('modalDescription').innerHTML = btn.dataset.description || '<em>Tidak ada deskripsi tersedia.</em>';
 
   const linkEl = document.getElementById('modalLink');
   if (btn.dataset.link) {

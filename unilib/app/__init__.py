@@ -53,4 +53,17 @@ def create_app(config_name='default'):
         from app.models.user import User
         return User.query.get(int(user_id))
 
+    import re as _re
+    @app.template_filter('html_preview')
+    def html_preview(value):
+        """Strip HTML tags, preserving bullet indicators for list items."""
+        if not value:
+            return ''
+        text = _re.sub(r'<li[^>]*>', '• ', value, flags=_re.IGNORECASE)
+        text = _re.sub(r'</(li|p|div|h[1-6])>', ' ', text, flags=_re.IGNORECASE)
+        text = _re.sub(r'<br\s*/?>', ' ', text, flags=_re.IGNORECASE)
+        text = _re.sub(r'<[^>]+>', '', text)
+        text = _re.sub(r'\s+', ' ', text).strip()
+        return text
+
     return app
