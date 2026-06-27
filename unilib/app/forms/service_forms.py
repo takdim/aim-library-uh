@@ -5,7 +5,9 @@ from wtforms.validators import DataRequired, Optional
 
 class ServiceForm(FlaskForm):
     title = StringField('Judul Layanan', validators=[DataRequired()])
+    title_en = StringField('Title (English)', validators=[Optional()])
     description = TextAreaField('Deskripsi', validators=[Optional()])
+    description_en = TextAreaField('Description (English)', validators=[Optional()])
     icon = StringField('Ikon (Material Symbol)', validators=[Optional()])
     link_url = StringField('URL Tujuan (opsional)', validators=[Optional()])
     sort_order = IntegerField('Urutan', default=0, validators=[Optional()])

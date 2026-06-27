@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template, abort, redirect, request as flask_request, make_response, url_for
 from app.models.news import News
 from app.models.statistic import Statistic
 from app.models.nav_link import NavLink
@@ -6,6 +6,16 @@ from app.models.service import Service
 from app.models.profile import ProfileSection
 
 public_bp = Blueprint('public', __name__)
+
+
+@public_bp.route('/set-lang/<lang>')
+def set_lang(lang):
+    if lang not in ('id', 'en'):
+        lang = 'id'
+    next_url = flask_request.referrer or url_for('public.index')
+    resp = make_response(redirect(next_url))
+    resp.set_cookie('lang', lang, max_age=60 * 60 * 24 * 365, samesite='Lax', httponly=True)
+    return resp
 
 
 @public_bp.route('/')

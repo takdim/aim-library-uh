@@ -79,6 +79,20 @@
 
   {% block body %}{% endblock %}
 
+  {% if request.blueprint == 'public' %}
+  <!-- Language Toggle -->
+  <div class="fixed bottom-6 right-6 z-[300] flex items-center gap-1 glass-panel rounded-full px-2 py-1.5 shadow-lg border border-white/25">
+    <a href="{{ url_for('public.set_lang', lang='id') }}"
+       class="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all {{ 'bg-[#0051d5] text-white' if lang == 'id' else 'text-[#45464d] hover:bg-white/50' }}">
+      🇮🇩 ID
+    </a>
+    <a href="{{ url_for('public.set_lang', lang='en') }}"
+       class="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all {{ 'bg-[#0051d5] text-white' if lang == 'en' else 'text-[#45464d] hover:bg-white/50' }}">
+      🇬🇧 EN
+    </a>
+  </div>
+  {% endif %}
+
   <!-- Main JS -->
   <script src="{{ url_for('static', filename='js/main.js') }}"></script>
   {% block extra_scripts %}{% endblock %}

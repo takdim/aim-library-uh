@@ -15,6 +15,7 @@ from app.forms.stat_forms import StatisticForm
 from app.utils.decorators import staff_required
 from app.utils.upload import save_image, delete_image
 from app.utils.log import log_activity
+from app.utils.sanitize import clean_html
 
 staff_bp = Blueprint('staff', __name__)
 
@@ -50,7 +51,7 @@ def news_create():
             title=form.title.data,
             category=form.category.data,
             excerpt=form.excerpt.data,
-            content=form.content.data,
+            content=clean_html(form.content.data),
             status=form.status.data,
             author_id=current_user.id,
         )
@@ -81,7 +82,7 @@ def news_edit(news_id):
         article.title = form.title.data
         article.category = form.category.data
         article.excerpt = form.excerpt.data
-        article.content = form.content.data
+        article.content = clean_html(form.content.data)
 
         if form.status.data == 'published' and article.status == 'draft':
             article.publish()
@@ -150,7 +151,9 @@ def profile_edit(section_key):
     form = ProfileSectionForm(obj=section)
     if form.validate_on_submit():
         section.title = form.title.data
-        section.content = form.content.data
+        section.title_en = form.title_en.data or None
+        section.content = clean_html(form.content.data)
+        section.content_en = clean_html(form.content_en.data) if form.content_en.data else None
         section.updated_by = current_user.id
         section.updated_at = datetime.now(timezone.utc)
 
@@ -256,7 +259,9 @@ def services_create():
     if form.validate_on_submit():
         svc = Service(
             title=form.title.data,
-            description=form.description.data,
+            title_en=form.title_en.data or None,
+            description=clean_html(form.description.data),
+            description_en=clean_html(form.description_en.data) if form.description_en.data else None,
             icon=form.icon.data,
             link_url=form.link_url.data,
             sort_order=form.sort_order.data or 0,
@@ -278,7 +283,9 @@ def services_edit(svc_id):
     form = ServiceForm(obj=svc)
     if form.validate_on_submit():
         svc.title = form.title.data
-        svc.description = form.description.data
+        svc.title_en = form.title_en.data or None
+        svc.description = clean_html(form.description.data)
+        svc.description_en = clean_html(form.description_en.data) if form.description_en.data else None
         svc.icon = form.icon.data
         svc.link_url = form.link_url.data
         svc.sort_order = form.sort_order.data or 0

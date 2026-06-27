@@ -12,7 +12,7 @@
     </a>
     <a href="{{ url_for('public.index') }}#berita" class="text-sm font-semibold text-[#45464d] flex items-center gap-1 hover:text-[#0051d5] transition-colors">
       <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span>
-      Kembali
+      {{ t('back') }}
     </a>
   </div>
 </nav>
@@ -22,9 +22,9 @@
   <!-- Breadcrumb -->
   <nav aria-label="Breadcrumb" class="mb-6">
     <ol class="flex items-center gap-2 text-xs text-[#45464d]">
-      <li><a href="{{ url_for('public.index') }}" class="hover:text-[#0051d5] transition-colors">Beranda</a></li>
+      <li><a href="{{ url_for('public.index') }}" class="hover:text-[#0051d5] transition-colors">{{ t('home') }}</a></li>
       <li aria-hidden="true"><span class="material-symbols-outlined" style="font-size:12px;">chevron_right</span></li>
-      <li><a href="{{ url_for('public.index') }}#berita" class="hover:text-[#0051d5] transition-colors">Berita</a></li>
+      <li><a href="{{ url_for('public.index') }}#berita" class="hover:text-[#0051d5] transition-colors">{{ t('news_breadcrumb') }}</a></li>
       <li aria-hidden="true"><span class="material-symbols-outlined" style="font-size:12px;">chevron_right</span></li>
       <li class="text-[#0051d5] font-medium truncate max-w-[200px]">{{ article.title }}</li>
     </ol>
@@ -37,7 +37,7 @@
       {{ article.published_at.strftime('%d %B %Y') if article.published_at else '' }}
     </time>
     {% if article.author %}
-    <span class="text-xs text-[#76777d]">oleh {{ article.author.full_name }}</span>
+    <span class="text-xs text-[#76777d]">{{ t('by') }} {{ article.author.full_name }}</span>
     {% endif %}
   </div>
 
@@ -63,7 +63,7 @@
     <a href="{{ url_for('public.index') }}#berita"
        class="inline-flex items-center gap-2 text-sm font-semibold text-[#0051d5] hover:gap-3 transition-all">
       <span class="material-symbols-outlined" style="font-size:18px;">arrow_back</span>
-      Lihat Semua Berita
+      {{ t('view_all_news') }}
     </a>
   </div>
 </main>

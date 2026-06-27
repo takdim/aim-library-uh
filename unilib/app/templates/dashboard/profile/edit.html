@@ -34,6 +34,25 @@
       {{ form.content(id='content-hidden', class='hidden') }}
       <div id="quill-editor">{% if form.content.data %}{{ form.content.data | safe }}{% endif %}</div>
     </div>
+
+    <!-- English Translation -->
+    <div class="pt-4 border-t border-[#e6e8ea]">
+      <div class="flex items-center gap-2 mb-4">
+        <span class="text-lg">🇬🇧</span>
+        <span class="font-poppins text-sm font-semibold text-[#45464d]">Terjemahan Bahasa Inggris <span class="text-xs font-normal text-[#76777d]">— opsional</span></span>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="form-label">{{ form.title_en.label.text }}</label>
+          {{ form.title_en(id='title_en', class='form-input', placeholder='English title...') }}
+        </div>
+        <div>
+          <label class="form-label">{{ form.content_en.label.text }}</label>
+          {{ form.content_en(id='content-en-hidden', class='hidden') }}
+          <div id="quill-editor-en">{% if form.content_en.data %}{{ form.content_en.data | safe }}{% endif %}</div>
+        </div>
+      </div>
+    </div>
     <div>
       <label class="form-label">Gambar Pendukung</label>
       {% if section.image_url %}
@@ -64,8 +83,24 @@
     placeholder: 'Tulis konten section...'
   });
 
+  const quillEn = new Quill('#quill-editor-en', {
+    theme: 'snow',
+    modules: {
+      toolbar: [
+        [{ 'header': [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline'],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        ['link', 'image'],
+        ['blockquote'],
+        ['clean']
+      ]
+    },
+    placeholder: 'Write content in English...'
+  });
+
   document.querySelector('form').addEventListener('submit', () => {
     document.getElementById('content-hidden').value = quill.root.innerHTML;
+    document.getElementById('content-en-hidden').value = quillEn.root.innerHTML;
   });
 </script>
 {% endblock %}

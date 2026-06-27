@@ -66,4 +66,14 @@ def create_app(config_name='default'):
         text = _re.sub(r'\s+', ' ', text).strip()
         return text
 
+    from flask import request as _req
+    from app.utils.i18n import get_t as _get_t
+
+    @app.context_processor
+    def inject_language():
+        lang = _req.cookies.get('lang', 'id')
+        if lang not in ('id', 'en'):
+            lang = 'id'
+        return {'lang': lang, 't': _get_t(lang)}
+
     return app

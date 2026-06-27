@@ -17,7 +17,7 @@
       <tr>
         <td><span class="material-symbols-outlined text-[#0051d5]" style="font-size:22px; font-variation-settings:'FILL' 1;">{{ svc.icon or 'support' }}</span></td>
         <td class="font-medium text-sm text-[#000000]">{{ svc.title }}</td>
-        <td class="text-xs text-[#45464d] max-w-xs truncate">{{ svc.description or '-' }}</td>
+        <td class="text-xs text-[#45464d] max-w-xs truncate">{{ svc.description | html_preview | truncate(80) if svc.description else '-' }}</td>
         <td class="text-xs text-[#45464d]">{{ svc.sort_order }}</td>
         <td><span class="badge {{ 'badge-active' if svc.is_active else 'badge-inactive' }}">{{ 'Aktif' if svc.is_active else 'Nonaktif' }}</span></td>
         <td>

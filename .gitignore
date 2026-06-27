@@ -165,3 +165,8 @@ unilib/*.db
 # Agent files
 .agents/
 skills-lock.json
+
+# User-uploaded files
+unilib/app/static/uploads/news/
+unilib/app/static/uploads/profile/
+unilib/app/static/uploads/logos/

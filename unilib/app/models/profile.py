@@ -8,7 +8,9 @@ class ProfileSection(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     section_key = db.Column(db.String(50), unique=True, nullable=False)
     title = db.Column(db.String(150), nullable=False)
+    title_en = db.Column(db.String(150), nullable=True)
     content = db.Column(db.Text, nullable=True)
+    content_en = db.Column(db.Text, nullable=True)
     image_url = db.Column(db.String(255), nullable=True)
     updated_by = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=True)
     updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc),

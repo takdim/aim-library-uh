@@ -54,6 +54,23 @@
       <label class="text-sm text-[#45464d]">{{ form.is_active.label.text }}</label>
     </div>
   </div>
+
+  <!-- English Translation -->
+  <div class="dash-card p-6 space-y-5 mt-4 border-2 border-dashed border-[#dae2fd]">
+    <div class="flex items-center gap-2">
+      <span class="text-lg">🇬🇧</span>
+      <h3 class="font-poppins text-sm font-semibold text-[#45464d]">Terjemahan Bahasa Inggris <span class="text-xs font-normal text-[#76777d]">— opsional</span></h3>
+    </div>
+    <div>
+      <label class="form-label">{{ form.title_en.label.text }}</label>
+      {{ form.title_en(class='form-input', placeholder='English title...') }}
+    </div>
+    <div>
+      <label class="form-label">{{ form.description_en.label.text }}</label>
+      {{ form.description_en(id='descriptionEnField', class='form-input hidden') }}
+      <div id="descriptionEnEditor"></div>
+    </div>
+  </div>
   <div class="flex gap-3 mt-5">
     {{ form.submit(class='btn btn-primary') }}
     <a href="{{ url_for('staff.services_list') }}" class="btn btn-ghost">Batal</a>
@@ -76,15 +93,30 @@
     }
   });
 
-  // Populate with existing value (edit mode)
-  const existing = document.getElementById('descriptionField').value;
-  if (existing) {
-    quill.clipboard.dangerouslyPasteHTML(existing);
-  }
+  const quillEn = new Quill('#descriptionEnEditor', {
+    theme: 'snow',
+    modules: {
+      toolbar: [
+        [{ header: [2, 3, false] }],
+        ['bold', 'italic', 'underline'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        ['clean']
+      ]
+    },
+    placeholder: 'Write description in English...'
+  });
 
-  // On submit, copy Quill HTML to the hidden textarea
+  // Populate existing values (edit mode)
+  const existing = document.getElementById('descriptionField').value;
+  if (existing) quill.clipboard.dangerouslyPasteHTML(existing);
+
+  const existingEn = document.getElementById('descriptionEnField').value;
+  if (existingEn) quillEn.clipboard.dangerouslyPasteHTML(existingEn);
+
+  // On submit, copy both Quill values to hidden fields
   document.querySelector('form').addEventListener('submit', function () {
     document.getElementById('descriptionField').value = quill.root.innerHTML;
+    document.getElementById('descriptionEnField').value = quillEn.root.innerHTML;
   });
 </script>
 {% endblock %}

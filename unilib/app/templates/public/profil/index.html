@@ -10,13 +10,15 @@
     </a>
     <a href="{{ url_for('public.index') }}" class="text-sm font-semibold text-[#45464d] flex items-center gap-1 hover:text-[#0051d5] transition-colors">
       <span class="material-symbols-outlined" style="font-size:16px;">arrow_back</span>
-      Beranda
+      {{ t('home') }}
     </a>
   </div>
 </nav>
 
 <main class="min-h-[100dvh] pt-28 pb-20 px-5 md:px-10 max-w-3xl mx-auto">
-  <h1 class="font-poppins text-[32px] md:text-[40px] font-bold text-[#000000] mb-8">{{ section.title }}</h1>
+  {% set sec_title = (section.title_en if lang == 'en' and section.title_en) or section.title %}
+  {% set sec_content = (section.content_en if lang == 'en' and section.content_en) or section.content %}
+  <h1 class="font-poppins text-[32px] md:text-[40px] font-bold text-[#000000] mb-8">{{ sec_title }}</h1>
 
   {% if section.image_url %}
   <figure class="rounded-card-lg overflow-hidden mb-10 shadow-lg">
@@ -27,7 +29,11 @@
   {% endif %}
 
   <div class="font-inter text-base text-[#191c1e] leading-relaxed prose max-w-none">
-    {{ section.content | safe if section.content else '<p class="text-[#45464d]">Konten belum tersedia.</p>' | safe }}
+    {% if sec_content %}
+    {{ sec_content | safe }}
+    {% else %}
+    <p class="text-[#45464d]">{{ t('content_unavailable') }}</p>
+    {% endif %}
   </div>
 </main>
 {% endblock %}
