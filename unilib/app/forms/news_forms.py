@@ -9,6 +9,7 @@ class NewsForm(FlaskForm):
         DataRequired(message='Judul wajib diisi.'),
         Length(max=255, message='Judul maksimal 255 karakter.')
     ])
+    title_en = StringField('Judul (English)', validators=[Optional(), Length(max=255)])
     category = SelectField('Kategori', choices=[
         ('Riset', 'Riset'),
         ('Event', 'Event'),
@@ -17,7 +18,9 @@ class NewsForm(FlaskForm):
         ('Umum', 'Umum'),
     ])
     excerpt = TextAreaField('Ringkasan', validators=[Optional(), Length(max=500)])
+    excerpt_en = TextAreaField('Ringkasan (English)', validators=[Optional(), Length(max=500)])
     content = TextAreaField('Isi Konten', validators=[DataRequired(message='Konten wajib diisi.')])
+    content_en = TextAreaField('Isi Konten (English)', validators=[Optional()])
     cover_image = FileField('Gambar Cover', validators=[
         Optional(),
         FileAllowed(['jpg', 'jpeg', 'png', 'webp'], 'Hanya gambar (JPG, PNG, WebP).')

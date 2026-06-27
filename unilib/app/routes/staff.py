@@ -49,9 +49,12 @@ def news_create():
     if form.validate_on_submit():
         article = News(
             title=form.title.data,
+            title_en=form.title_en.data or None,
             category=form.category.data,
             excerpt=form.excerpt.data,
+            excerpt_en=form.excerpt_en.data or None,
             content=clean_html(form.content.data),
+            content_en=clean_html(form.content_en.data) if form.content_en.data else None,
             status=form.status.data,
             author_id=current_user.id,
         )
@@ -80,9 +83,12 @@ def news_edit(news_id):
     form = NewsForm(obj=article)
     if form.validate_on_submit():
         article.title = form.title.data
+        article.title_en = form.title_en.data or None
         article.category = form.category.data
         article.excerpt = form.excerpt.data
+        article.excerpt_en = form.excerpt_en.data or None
         article.content = clean_html(form.content.data)
+        article.content_en = clean_html(form.content_en.data) if form.content_en.data else None
 
         if form.status.data == 'published' and article.status == 'draft':
             article.publish()

@@ -1,6 +1,9 @@
 {% extends "base.html" %}
-{% block title %}{{ article.title }} — UniLib{% endblock %}
-{% block meta_desc %}{{ article.excerpt or (article.content | striptags | truncate(150)) }}{% endblock %}
+{% set art_title = (article.title_en if lang == 'en' and article.title_en) or article.title %}
+{% set art_content = (article.content_en if lang == 'en' and article.content_en) or article.content %}
+{% set art_excerpt = (article.excerpt_en if lang == 'en' and article.excerpt_en) or article.excerpt %}
+{% block title %}{{ art_title }} — UniLib{% endblock %}
+{% block meta_desc %}{{ art_excerpt or (art_content | striptags | truncate(150)) }}{% endblock %}
 
 {% block body %}
 <!-- Minimal navbar for article pages -->
@@ -26,7 +29,7 @@
       <li aria-hidden="true"><span class="material-symbols-outlined" style="font-size:12px;">chevron_right</span></li>
       <li><a href="{{ url_for('public.index') }}#berita" class="hover:text-[#0051d5] transition-colors">{{ t('news_breadcrumb') }}</a></li>
       <li aria-hidden="true"><span class="material-symbols-outlined" style="font-size:12px;">chevron_right</span></li>
-      <li class="text-[#0051d5] font-medium truncate max-w-[200px]">{{ article.title }}</li>
+      <li class="text-[#0051d5] font-medium truncate max-w-[200px]">{{ art_title }}</li>
     </ol>
   </nav>
 
@@ -42,20 +45,20 @@
   </div>
 
   <!-- Title -->
-  <h1 class="font-poppins text-[32px] md:text-[40px] font-bold text-[#000000] leading-tight mb-8">{{ article.title }}</h1>
+  <h1 class="font-poppins text-[32px] md:text-[40px] font-bold text-[#000000] leading-tight mb-8">{{ art_title }}</h1>
 
   <!-- Cover image -->
   {% if article.cover_image %}
   <figure class="rounded-card-lg overflow-hidden image-zoom-container mb-10 shadow-lg">
     <img src="{{ url_for('static', filename='uploads/' + article.cover_image) }}"
-         alt="{{ article.title }}"
+         alt="{{ art_title }}"
          class="w-full h-80 object-cover">
   </figure>
   {% endif %}
 
   <!-- Content -->
   <div class="font-inter text-base text-[#191c1e] leading-relaxed prose prose-headings:font-poppins prose-a:text-[#0051d5] max-w-none">
-    {{ article.content | safe }}
+    {{ art_content | safe }}
   </div>
 
   <!-- Back link -->
